@@ -388,7 +388,7 @@ def checkReferencePath(inRefpath):
            isWithinRepository, adapterGffFile
 
 #if __name__ == "__main__":
-#    refPath = "/mnt/secondary/Smrtanalysis/opt/smrtanalysis" + \
+#    refPath = "/opt/smrtanalysis" + \
 #              "/common/references/lambda/"
 #    refpath, faFile, saFile, isWithinRepository = checkReferencePath(refPath)
 #    assert(faFile == refPath + "sequence/" + "lambda.fasta")
