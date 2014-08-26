@@ -19,6 +19,7 @@ setup(
         'pbalign=pbalign.pbalignrunner:main',
         'maskAlignedReads.py = pbalign.tools.mask_aligned_reads:main',
         'loadChemistry.py = pbalign.tools.loadChemistry:main',
-        'extractUnmappedSubreads.py = pbalign.tools.extractUnmappedSubreads:main'
+        'extractUnmappedSubreads.py = pbalign.tools.extractUnmappedSubreads:main',
+        'createChemistryHeader.py = pbalign.tools.createChemistryHeader:main'
         ]}
     )
