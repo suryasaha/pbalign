@@ -154,7 +154,7 @@ def get_parser():
               "the input_alignment_file. Also can be a fofn of bas or bax "
               "files."),
         nargs='+',
-        require=True)
+        required=True)
 
     return parser
 
