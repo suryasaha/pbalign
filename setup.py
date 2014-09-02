@@ -14,6 +14,7 @@ setup(
     zip_safe = False,
     install_requires=[
         'pbcore >= 0.8.5',
+        'pysam'
         ],
     entry_points={'console_scripts': [
         'pbalign=pbalign.pbalignrunner:main',
