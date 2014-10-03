@@ -195,6 +195,15 @@ class GMAPService(FastaBasedAlignService):
 
         return cmdStr
 
+    def _releaseLock(self, dbLock):
+        """Release dbLock."""
+        _o, errCode, _m = backticks("rm -f {dbLock}".format(dbLock=dbLock))
+        if errCode == 0:
+            logging.debug(self.name + ": Release the lock for DB creation.")
+        else:
+            raise RuntimeError(self.name + ": Failed to release lock " +
+                               dbLock + ". Please delete the lock manually.")
+
     def _gmapCreateDB(self, referenceFile, isWithinRepository, tempRootDir):
         """
         Create gmap database for reference sequences if no DB exists.
@@ -243,7 +252,7 @@ class GMAPService(FastaBasedAlignService):
             if (errCode != 0):
                 logging.error(self.name + ": Failed to create {dbLock}.\n" +
                               errMsg)
-                backticks("rm -f {dbLock}".format(dbLock=dbLock))
+                self._releaseLock(dbLock)
                 raise RuntimeError(errMsg)
 
             logging.info(self.name + ": Create GMAP DB for {inFa}.".format(
@@ -255,14 +264,13 @@ class GMAPService(FastaBasedAlignService):
             if (errCode != 0):
                 logging.error(self.name + ": Failed to build GMAP db.\n" +
                               errMsg)
-                backticks("rm -f {dbLock}".format(dbLock=dbLock))
+                self._releaseLock(dbLock)
                 raise RuntimeError(errMsg)
 
             # Delete the lock file to notify others pbalign who are waiting
             # for this DB to be created.
-            _output, errCode, errMsg = backticks("rm -f {dbLock}".format(
-                dbLock=dbLock))
-            logging.debug(self.name + ": Release the lock for DB creation.")
+            self._releaseLock(dbLock)
+
         return (dbRoot, dbName)
 
     def _preProcess(self, inputFileName, referenceFile, regionTable,
