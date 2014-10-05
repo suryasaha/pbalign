@@ -72,6 +72,7 @@ DEFAULT_OPTIONS = {"regionTable": None,
                    # Cmp.h5 writer options
                    "readType": "standard",
                    "forQuiver": False,
+                   "loadQVs": False,
                    "byread": False,
                    "metrics": str(",".join(DEFAULT_METRICS)),
                    # Miscellaneous options
@@ -116,7 +117,7 @@ def constructOptionParser(parser=None):
                         action="store",
                         help="Specify a set of user-defined argument values.")
 
-    helpstr = "When input reads are in fasta format and output is a cmp.h5 " + \
+    helpstr = "When input reads are in fasta format and output is a cmp.h5\n" + \
               "this option can specify pls.h5 or bas.h5 or \n" + \
               "FOFN files from which pulse metrics can be loaded for Quiver."
     parser.add_argument("--pulseFile",
@@ -317,19 +318,27 @@ def constructOptionParser(parser=None):
                         #help=helpstr)
 
     helpstr = "The output cmp.h5 file which will be sorted, loaded\n" + \
-              "with pulse information, and repacked, so that it \n" + \
+              "with pulse QV information, and repacked, so that it \n" + \
               "can be consumed by quiver directly. This requires\n" + \
-              "the input file to be in PacBio bas/pls.h5 format.\n" + \
-              "Default value is False."
+              "the input file to be in PacBio bas/pls.h5 format,\n" + \
+              "and --useccs must be None. Default value is False."
     parser.add_argument("--forQuiver",
                         dest="forQuiver",
                         action="store_true",
                         default=DEFAULT_OPTIONS["forQuiver"],
                         help=helpstr)
 
+    helpstr = "Similar to --forQuiver, the only difference is that \n" + \
+              "--useccs can be specified. Default value is False."
+    parser.add_argument("--loadQVs",
+                        dest="loadQVs",
+                        action="store_true",
+                        default=DEFAULT_OPTIONS["loadQVs"],
+                        help=helpstr)
+
     helpstr = "Load pulse information using -byread option instead\n" + \
-              "of -bymetric. Only works when --forQuiver is set.\n" + \
-              "Default value is False."
+              "of -bymetric. Only works when --forQuiver or \n" + \
+              "--loadQVs are set. Default value is False."
     parser.add_argument("--byread",
                         dest="byread",
                         action="store_true",
@@ -338,8 +347,9 @@ def constructOptionParser(parser=None):
 
     helpstr = "Load the specified (comma-delimited list of) metrics\n" + \
               "instead of the default metrics required by quiver.\n" + \
-              "This option only works when --forQuiver is set.\n" + \
-              "Default: {m}".format(m=DEFAULT_OPTIONS["metrics"])
+              "This option only works when --forQuiver  or \n" + \
+              "--loadQVs are set. Default: {m}".\
+              format(m=DEFAULT_OPTIONS["metrics"])
     parser.add_argument("--metrics",
                         dest="metrics",
                         type=str,

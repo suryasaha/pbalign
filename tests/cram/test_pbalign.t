@@ -193,6 +193,9 @@ Test pbalign
   $ h5dump -a /ReadType $CMPOUT | grep "CCS"
      (0): "CCS"
 
+#Test --forQuiver can not be used together with --useccs
+  $ pbalign $READFILE $REFFILE $CMPOUT --useccs=useccsdenovo --algorithmOptions=" -holeNumbers 0-100" --forQuiver 1>/dev/null 2>/dev/null || echo 'fail as expected'
+  fail as expected
 
 
 #Test whether pbalign can produce sam output for non-PacBio reads

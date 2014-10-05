@@ -132,13 +132,23 @@ class PBAlignRunner(PBToolRunner):
             args.readType = "CCS"
 
         if args.forQuiver:
+            if args.useccs is not None:
+                errMsg = "Options --forQuiver and --useccs should not " + \
+                         "be used together, since Quiver is not designed to " + \
+                         "polish ccs reads. if you want to align ccs reads" + \
+                         "in cmp.h5 format with pulse QVs loaded, use " + \
+                         "--loadQVs with --useccs instead."
+                raise ValueError(errMsg)
+            args.loadQVs = True
+
+        if args.loadQVs:
             if fileNames.pulseFileName is None:
-                errMsg = "Neither the input file is in bas/pls/ccs.h5 " + \
-                         "format, nor --pulseFile is specified, "
+                errMsg = "The input file has to be in bas/pls/ccs.h5 " + \
+                         "format, or --pulseFile needs to be specified, "
             if getFileFormat(fileNames.outputFileName) != FILE_FORMATS.CMP:
-                errMsg = "The output file is not in cmp.h5 format, "
+                errMsg = "The output file has to be in cmp.h5 format, "
             if errMsg != "":
-                errMsg += ", while --forQuiver is true."
+                errMsg += "in order to load pulse QVs."
                 logging.error(errMsg)
                 raise ValueError(errMsg)
 
@@ -267,7 +277,7 @@ class PBAlignRunner(PBToolRunner):
             return 1
 
         # Call post service for quiver.
-        if self.args.forQuiver:
+        if self.args.forQuiver or self.args.loadQVs:
             postService = ForQuiverService(self.fileNames,
                                            self.args)
             try:
