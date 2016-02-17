@@ -140,9 +140,9 @@ Before installing pbcore, you may need to install numpy and h5py from ::
 
 , or if you have root permission on Ubuntu, do ::
 
-    $ git install numpy
+    $ pip install numpy
     $ sudo apt-get install libhdf5-serial-dev
-    $ git install h5py
+    $ pip install h5py
 
 To install pbcore, execute ::
 
